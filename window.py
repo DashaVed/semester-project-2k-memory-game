@@ -1,4 +1,7 @@
-from PyQt6.QtCore import QTimer, QRunnable, pyqtSlot, QThreadPool
+import os
+
+from PyQt6.QtCore import QTimer
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from random import shuffle
 
@@ -13,7 +16,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         super(Game, self).__init__()
         self.setupUi(self)
         self.open_card = {}
-        self.threadpool = QThreadPool()
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -68,7 +70,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         button.setEnabled(True)
         button.setText(card_list[card])
         button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
-        QTimer().singleShot(2000, lambda: self.update_text(button))
+        QTimer().singleShot(3000, lambda: self.update_text(button))
 
     @staticmethod
     def update_text(button):

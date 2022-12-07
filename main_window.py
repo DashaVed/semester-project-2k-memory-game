@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'main.ui'
+# Form implementation generated from reading ui file 'main2.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -12,9 +12,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(652, 493)
-        MainWindow.setMinimumSize(QtCore.QSize(652, 493))
-        MainWindow.setMaximumSize(QtCore.QSize(652, 493))
+        MainWindow.resize(790, 391)
+        MainWindow.setMinimumSize(QtCore.QSize(790, 350))
+        MainWindow.setMaximumSize(QtCore.QSize(2000, 493))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(14)
@@ -33,18 +33,24 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QLabel {\n"
+"border-radius: 20px;\n"
 "color: #FFB8CE;\n"
+"}\n"
+"\n"
+"QGroupBox {\n"
+"border: 1px solid #716799;\n"
 "}\n"
 "\n"
 "")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 632, 314))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 632, 331))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setSpacing(1)
+        self.gridLayout.setHorizontalSpacing(1)
+        self.gridLayout.setVerticalSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.button_17 = QtWidgets.QPushButton(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -299,7 +305,7 @@ class Ui_MainWindow(object):
         self.button_10.setObjectName("button_10")
         self.gridLayout.addWidget(self.button_10, 1, 3, 1, 1)
         self.start_button = QtWidgets.QPushButton(self.centralwidget)
-        self.start_button.setGeometry(QtCore.QRect(10, 390, 631, 51))
+        self.start_button.setGeometry(QtCore.QRect(116, 350, 105, 31))
         font = QtGui.QFont()
         font.setFamily("Arial Narrow")
         font.setPointSize(16)
@@ -307,31 +313,85 @@ class Ui_MainWindow(object):
         font.setItalic(True)
         font.setWeight(75)
         self.start_button.setFont(font)
+        self.start_button.setStyleSheet("QLabel {\n"
+"border-radius: 20px;\n"
+"}")
         self.start_button.setObjectName("start_button")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(10, 340, 631, 41))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Ignored, QtWidgets.QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
+        self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox.setGeometry(QtCore.QRect(660, 20, 121, 151))
+        self.groupBox.setStyleSheet("QGroupBox {\n"
+"border: 1px solid #514С66;\n"
+"}")
+        self.groupBox.setTitle("")
+        self.groupBox.setObjectName("groupBox")
+        self.label_profile1 = QtWidgets.QLabel(self.groupBox)
+        self.label_profile1.setGeometry(QtCore.QRect(10, 10, 101, 111))
+        self.label_profile1.setMinimumSize(QtCore.QSize(100, 101))
+        self.label_profile1.setText("")
+        self.label_profile1.setPixmap(QtGui.QPixmap("static/img/avatar1.jpg"))
+        self.label_profile1.setScaledContents(True)
+        self.label_profile1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_profile1.setWordWrap(False)
+        self.label_profile1.setObjectName("label_profile1")
+        self.labal_score1 = QtWidgets.QLabel(self.groupBox)
+        self.labal_score1.setGeometry(QtCore.QRect(0, 125, 121, 20))
+        font = QtGui.QFont()
+        font.setFamily("Arial Narrow")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
+        self.labal_score1.setFont(font)
+        self.labal_score1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.labal_score1.setObjectName("labal_score1")
+        self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_2.setGeometry(QtCore.QRect(660, 180, 121, 151))
+        self.groupBox_2.setStyleSheet("QGroupBox {\n"
+"border: 1px solid #514С66;\n"
+"}")
+        self.groupBox_2.setTitle("")
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.label_profile2 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_profile2.setGeometry(QtCore.QRect(10, 10, 101, 111))
+        self.label_profile2.setText("")
+        self.label_profile2.setPixmap(QtGui.QPixmap("static/img/avatar2.jpg"))
+        self.label_profile2.setScaledContents(True)
+        self.label_profile2.setObjectName("label_profile2")
+        self.label_score2 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_score2.setGeometry(QtCore.QRect(0, 125, 121, 20))
+        font = QtGui.QFont()
+        font.setFamily("Arial Narrow")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
+        self.label_score2.setFont(font)
+        self.label_score2.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_score2.setObjectName("label_score2")
+        self.exit_button = QtWidgets.QPushButton(self.centralwidget)
+        self.exit_button.setGeometry(QtCore.QRect(10, 350, 105, 31))
         font = QtGui.QFont()
         font.setFamily("Arial Narrow")
         font.setPointSize(16)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
+        self.exit_button.setFont(font)
+        self.exit_button.setStyleSheet("QLabel {\n"
+"border-radius: 20px;\n"
+"}")
+        self.exit_button.setObjectName("exit_button")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(230, 350, 411, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Narrow")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
         self.label.setFont(font)
-        self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 652, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -339,5 +399,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.start_button.setText(_translate("MainWindow", "Start the Game"))
-        self.label.setText(_translate("MainWindow", "For notes"))
+        self.start_button.setText(_translate("MainWindow", "Reset"))
+        self.labal_score1.setText(_translate("MainWindow", "Score: 0"))
+        self.label_score2.setText(_translate("MainWindow", "Score: 0"))
+        self.exit_button.setText(_translate("MainWindow", "Exit"))
+        self.label.setText(_translate("MainWindow", "Observe the cards and memories them!"))
