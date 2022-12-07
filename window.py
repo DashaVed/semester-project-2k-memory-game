@@ -1,6 +1,4 @@
-import time
-
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import QTimer, QRunnable, pyqtSlot, QThreadPool
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from random import shuffle
 
@@ -10,17 +8,12 @@ card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G
 shuffle(card_list)
 
 
-# пишем своё MainWindow, основанное на Ui_MainWindow (которое мы ранее сгенерировали)
 class Game(QMainWindow, main_window.Ui_MainWindow):
     def __init__(self):
-        # в методе инициализации мы вызываем родительскую инициализацию (устанавливаем элементы интерфейса)
         super(Game, self).__init__()
         self.setupUi(self)
         self.open_card = {}
-        #
-        # for index, button in enumerate(button_list):
-        #     button.clicked.connect(lambda: self.clicker(self.button_1, card_list[index]))
-
+        self.threadpool = QThreadPool()
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -66,26 +59,20 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.button_16, self.button_17, self.button_18,
         ]
         shuffle(card_list)
-        self.button_1.setEnabled(True)
-        self.button_1.setText(card_list[0])
-        self.button_1.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
         self.open_card = {}
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update)
-        self.timer.start(1000)
-        # for b in button_list:
-        #     b.setEnabled(True)
-        #     b.setText(card_list[0])
-        #     b.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
-        #     self.open_card = {}
-        #     self.timer = QTimer()
-        #     self.timer.timeout.connect(self.update_text(b))
-        #     self.timer.start(2000)
+        for index, b in enumerate(button_list):
+            self.reset_button(b, index)
 
-    def update(self):
-        print(self.timer.isActive())
-        self.button_1.setText('')
-        self.timer.stop()
+    def reset_button(self, button, card):
+        print(button)
+        button.setEnabled(True)
+        button.setText(card_list[card])
+        button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
+        QTimer().singleShot(2000, lambda: self.update_text(button))
+
+    @staticmethod
+    def update_text(button):
+        button.setText('')
 
 
 if __name__ == "__main__":
