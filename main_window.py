@@ -13,6 +13,30 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(652, 493)
+        MainWindow.setMinimumSize(QtCore.QSize(652, 493))
+        MainWindow.setMaximumSize(QtCore.QSize(652, 493))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
+        MainWindow.setFont(font)
+        MainWindow.setStyleSheet("QMainWindow {\n"
+"background-color: #464258;\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"color: #FFF352;\n"
+"background-color: #716799;\n"
+"border-radius: 2px;\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"color: #FFB8CE;\n"
+"}\n"
+"\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -254,8 +278,10 @@ class Ui_MainWindow(object):
         self.button_10.setSizePolicy(sizePolicy)
         self.button_10.setMinimumSize(QtCore.QSize(100, 100))
         font = QtGui.QFont()
-        font.setFamily("Microsoft JhengHei UI")
+        font.setFamily("Arial")
         font.setPointSize(28)
+        font.setBold(False)
+        font.setWeight(50)
         self.button_10.setFont(font)
         self.button_10.setText("")
         self.button_10.setObjectName("button_10")
@@ -277,15 +303,26 @@ class Ui_MainWindow(object):
         self.start_button = QtWidgets.QPushButton(self.centralwidget)
         self.start_button.setGeometry(QtCore.QRect(10, 390, 631, 51))
         font = QtGui.QFont()
-        font.setFamily("Arial")
+        font.setFamily("Arial Narrow")
         font.setPointSize(16)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
         self.start_button.setFont(font)
         self.start_button.setObjectName("start_button")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 340, 631, 41))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Ignored, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
+        self.label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setFamily("Arial")
+        font.setFamily("Arial Narrow")
         font.setPointSize(16)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label.setObjectName("label")
