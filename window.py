@@ -19,7 +19,6 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.duration = 5
 
         self.start_button.clicked.connect(lambda: self.start())
-        print(self.main_window.label.text())
         self.end_button.clicked.connect(lambda: exit_app())
 
     def start(self):
@@ -28,7 +27,7 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         timer_update.timeout.connect(lambda: self.update_timer(timer_update))
         timer_update.start(1000)
         timer = QTimer()
-        timer.singleShot(6000, self.main_window.reset)
+        timer.singleShot(6000, lambda: self.main_window.reset(is_start=True))
 
         window.hide()
 
@@ -87,7 +86,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         self.check_pair(b)
 
-    def reset(self):
+    def reset(self, is_start=False):
         button_list = [
             self.button_1, self.button_2, self.button_3,
             self.button_4, self.button_5, self.button_6,
@@ -104,10 +103,11 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score2.setText('Score: 0')
 
         for index, b in enumerate(button_list):
-            self.reset_button(b, index)
+            self.reset_button(b, index, is_start)
 
-    def reset_button(self, button, card):
-        button.setEnabled(True)
+    def reset_button(self, button, card, is_start):
+        if is_start:
+            button.setEnabled(True)
         button.setText(card_list[card])
         button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
         QTimer().singleShot(3000, lambda: self.update_text(button))
