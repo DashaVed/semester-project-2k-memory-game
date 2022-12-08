@@ -29,6 +29,9 @@ class Ui_StartWindow(object):
         self.start_button = QtWidgets.QPushButton(self.centralwidget)
         self.start_button.setGeometry(QtCore.QRect(150, 150, 211, 41))
         self.start_button.setObjectName("start_button")
+        self.end_button = QtWidgets.QPushButton(self.centralwidget)
+        self.end_button.setGeometry(QtCore.QRect(150, 201, 211, 41))
+        self.end_button.setObjectName("end_button")
         StartWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(StartWindow)
@@ -39,3 +42,4 @@ class Ui_StartWindow(object):
         StartWindow.setWindowTitle(_translate("StartWindow", "MainWindow"))
         self.label.setText(_translate("StartWindow", "Memory Game"))
         self.start_button.setText(_translate("StartWindow", "Start"))
+        self.end_button.setText(_translate("StartWindow", "Exit"))

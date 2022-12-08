@@ -6,7 +6,6 @@ import start_window
 import main_window
 
 card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I']
-shuffle(card_list)
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
@@ -19,6 +18,7 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.main_window = Game()
 
         self.start_button.clicked.connect(lambda: self.start())
+        self.end_button.clicked.connect(lambda: exit_app())
 
     def start(self):
         duration = 5
@@ -57,6 +57,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.button_17.clicked.connect(lambda: self.clicker(self.button_17, card_list[16]))
         self.button_18.clicked.connect(lambda: self.clicker(self.button_18, card_list[17]))
         self.start_button.clicked.connect(lambda: self.reset())
+        self.exit_button.clicked.connect(lambda: exit_app())
+
 
     def check_pair(self, b):
         value = b.text()
@@ -103,6 +105,10 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     @staticmethod
     def update_text(button):
         button.setText('')
+
+
+def exit_app():
+    app.exit()
 
 
 if __name__ == "__main__":
