@@ -18,6 +18,9 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.main_window = Game()
         self.duration = 5
 
+        # self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.client.connect(('127.0.0.1', 5060))
+
         self.start_button.clicked.connect(lambda: self.start())
         self.end_button.clicked.connect(lambda: exit_app())
 
@@ -28,6 +31,9 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         timer_update.start(1000)
         timer = QTimer()
         timer.singleShot(6000, lambda: self.main_window.reset(is_start=True))
+
+        # receive_thread = threading.Thread(target=self.main_window.receive)
+        # receive_thread.start()
 
         window.hide()
 
@@ -45,7 +51,10 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         super(Game, self).__init__()
         self.setupUi(self)
         self.open_card = {}
-        self.score = 0
+        self.score1 = 0
+        self.score2 = 0
+
+        self.first_turn = True
 
         QTimer.singleShot(1, self.reset)
 
@@ -75,8 +84,12 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         if value in self.open_card.keys():
             b.setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
             self.open_card[value].setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
-            self.score += 1
-            self.label_score1.setText(f'Score: {self.score}')
+            if self.first_turn:
+                self.score1 += 1
+                self.label_score1.setText(f'Score: {self.score1}')
+            else:
+                self.score2 += 1
+                self.label_score2.setText(f'Score: {self.score2}')
             return
         self.open_card[b.text()] = b
 
@@ -85,6 +98,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         b.setEnabled(False)
 
         self.check_pair(b)
+
+        self.first_turn = False if self.first_turn is True else True
 
     def reset(self, is_start=False):
         button_list = [
@@ -98,7 +113,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         shuffle(card_list)
         self.open_card = {}
 
-        self.score = 0
+        self.score1 = 0
+        self.score2 = 0
+        self.first_turn = True
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
 
@@ -115,6 +132,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     @staticmethod
     def update_text(button):
         button.setText('')
+
+    def receive(self):
+        pass
 
 
 def exit_app():
