@@ -1,4 +1,4 @@
-from PyQt6.QtCore import QTimer, QEvent
+from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from random import shuffle
 
