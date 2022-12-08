@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'main2.ui'
+# Form implementation generated from reading ui file 'main.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -333,17 +333,17 @@ class Ui_MainWindow(object):
         self.label_profile1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_profile1.setWordWrap(False)
         self.label_profile1.setObjectName("label_profile1")
-        self.labal_score1 = QtWidgets.QLabel(self.groupBox)
-        self.labal_score1.setGeometry(QtCore.QRect(0, 125, 121, 20))
+        self.label_score1 = QtWidgets.QLabel(self.groupBox)
+        self.label_score1.setGeometry(QtCore.QRect(0, 125, 121, 20))
         font = QtGui.QFont()
         font.setFamily("Arial Narrow")
         font.setPointSize(12)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
-        self.labal_score1.setFont(font)
-        self.labal_score1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labal_score1.setObjectName("labal_score1")
+        self.label_score1.setFont(font)
+        self.label_score1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_score1.setObjectName("label_score1")
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_2.setGeometry(QtCore.QRect(660, 180, 121, 151))
         self.groupBox_2.setStyleSheet("QGroupBox {\n"
@@ -400,7 +400,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.start_button.setText(_translate("MainWindow", "Reset"))
-        self.labal_score1.setText(_translate("MainWindow", "Score: 0"))
-        self.label_score2.setText(_translate("MainWindow", "Score: 0"))
+        self.label_score1.setText(_translate("MainWindow", "Score: "))
+        self.label_score2.setText(_translate("MainWindow", "Score: "))
         self.exit_button.setText(_translate("MainWindow", "Exit"))
         self.label.setText(_translate("MainWindow", "Observe the cards and memories them!"))

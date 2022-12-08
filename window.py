@@ -1,14 +1,32 @@
-import os
-
-from PyQt6.QtCore import QTimer
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import QTimer, QEvent
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from random import shuffle
 
+import start_window
 import main_window
 
 card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I']
 shuffle(card_list)
+
+
+class Start(QMainWindow, start_window.Ui_StartWindow):
+
+    def __init__(self):
+        super(Start, self).__init__()
+        self.ui = None
+        self.start_window = None
+        self.setupUi(self)
+        self.main_window = Game()
+
+        self.start_button.clicked.connect(lambda: self.start())
+
+    def start(self):
+        duration = 5
+        self.main_window.show()
+        self.main_window.label.setText(f'Game started in {duration} sec')
+        timer = QTimer()
+        timer.singleShot(5000, self.main_window.reset)
+        window.hide()
 
 
 class Game(QMainWindow, main_window.Ui_MainWindow):
@@ -16,6 +34,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         super(Game, self).__init__()
         self.setupUi(self)
         self.open_card = {}
+        self.score = 0
+
+        QTimer.singleShot(1, self.reset)
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -42,6 +63,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         if value in self.open_card.keys():
             b.setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
             self.open_card[value].setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
+            self.score += 1
+            self.label_score1.setText(f'Score: {self.score}')
             return
         self.open_card[b.text()] = b
 
@@ -62,11 +85,16 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         ]
         shuffle(card_list)
         self.open_card = {}
+
+        self.score = 0
+        self.label_score1.setText('Score: 0')
+        self.label_score2.setText('Score: 0')
+        self.label.setText('Observe the cards and memories them!')
+
         for index, b in enumerate(button_list):
             self.reset_button(b, index)
 
     def reset_button(self, button, card):
-        print(button)
         button.setEnabled(True)
         button.setText(card_list[card])
         button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
@@ -79,6 +107,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
-    window = Game()
+    window = Start()
     window.show()
     app.exec()
