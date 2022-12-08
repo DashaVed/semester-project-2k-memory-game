@@ -16,17 +16,29 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.start_window = None
         self.setupUi(self)
         self.main_window = Game()
+        self.duration = 5
 
         self.start_button.clicked.connect(lambda: self.start())
+        print(self.main_window.label.text())
         self.end_button.clicked.connect(lambda: exit_app())
 
     def start(self):
-        duration = 5
         self.main_window.show()
-        self.main_window.label.setText(f'Game started in {duration} sec')
+        timer_update = QTimer()
+        timer_update.timeout.connect(lambda: self.update_timer(timer_update))
+        timer_update.start(1000)
         timer = QTimer()
-        timer.singleShot(5000, self.main_window.reset)
+        timer.singleShot(6000, self.main_window.reset)
+
         window.hide()
+
+    def update_timer(self, timer):
+        self.main_window.label.setText(f'Game started in {self.duration} sec')
+        if self.duration == 0:
+            timer.stop()
+            self.main_window.label.setText('Observe the cards and memories them!')
+            self.duration = 5
+        self.duration -= 1
 
 
 class Game(QMainWindow, main_window.Ui_MainWindow):
@@ -59,7 +71,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.start_button.clicked.connect(lambda: self.reset())
         self.exit_button.clicked.connect(lambda: exit_app())
 
-
     def check_pair(self, b):
         value = b.text()
         if value in self.open_card.keys():
@@ -91,7 +102,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.score = 0
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
-        self.label.setText('Observe the cards and memories them!')
 
         for index, b in enumerate(button_list):
             self.reset_button(b, index)

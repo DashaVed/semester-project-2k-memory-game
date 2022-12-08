@@ -390,6 +390,7 @@ class Ui_MainWindow(object):
         font.setItalic(True)
         font.setWeight(75)
         self.label.setFont(font)
+        self.label.setText("")
         self.label.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -403,4 +404,3 @@ class Ui_MainWindow(object):
         self.label_score1.setText(_translate("MainWindow", "Score: "))
         self.label_score2.setText(_translate("MainWindow", "Score: "))
         self.exit_button.setText(_translate("MainWindow", "Exit"))
-        self.label.setText(_translate("MainWindow", "Observe the cards and memories them!"))
