@@ -1,11 +1,16 @@
+import pickle
+import socket
+import threading
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow, QApplication
-from random import shuffle
 
 import start_window
 import main_window
 
 card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I']
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 5060))
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
@@ -18,9 +23,6 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.main_window = Game()
         self.duration = 5
 
-        # self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.client.connect(('127.0.0.1', 5060))
-
         self.start_button.clicked.connect(lambda: self.start())
         self.end_button.clicked.connect(lambda: exit_app())
 
@@ -32,8 +34,8 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         timer = QTimer()
         timer.singleShot(6000, lambda: self.main_window.reset(is_start=True))
 
-        # receive_thread = threading.Thread(target=self.main_window.receive)
-        # receive_thread.start()
+        receive_thread = threading.Thread(target=self.main_window.receive)
+        receive_thread.start()
 
         window.hide()
 
@@ -110,7 +112,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.button_13, self.button_14, self.button_15,
             self.button_16, self.button_17, self.button_18,
         ]
-        shuffle(card_list)
         self.open_card = {}
 
         self.score1 = 0
@@ -134,7 +135,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         button.setText('')
 
     def receive(self):
-        pass
+        global card_list
+        while True:
+            card_list = pickle.loads(client.recv(1024))
 
 
 def exit_app():

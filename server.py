@@ -1,50 +1,39 @@
 import os
 import socket
 import threading
+import pickle
+from random import shuffle
 
 host = '127.0.0.1'
 port = 5060
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
-server.listen()
+
+server.listen(2)
+print("Waiting for a connection, Server Started")
 
 clients = []
-nicknames = []
-
-
-def broadcast(message):
-    for client in clients:
-        client.send(message)
+card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I']
+shuffle(card_list)
 
 
 def handle(client):
     while True:
         try:
-            message = client.recv(1024)
-            broadcast(message)
-        except:
-            index = clients.index(client)
+            client.send(pickle.dumps(card_list))
+        except ValueError as e:
             clients.remove(client)
             client.close()
-            nickname = nicknames[index]
-            broadcast('{} left!'.format(nickname).encode('ascii'))
-            nicknames.remove(nickname)
             break
+
 
 
 def receive():
     while True:
         client, address = server.accept()
         print("Connected with {}".format(str(address)))
-
-        client.send('NICK'.encode('ascii'))
-
-        nickname = client.recv(1024).decode('ascii')
-        nicknames.append(nickname)
         clients.append(client)
-
-        print("Nickname is {}".format(nickname))
 
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
