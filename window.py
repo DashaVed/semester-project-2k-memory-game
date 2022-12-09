@@ -1,11 +1,16 @@
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow, QApplication
-from random import shuffle
+from PyQt6 import QtGui
+from random import shuffle, randint
+import os
 
 import start_window
 import main_window
 
+dirname = 'static/img/cards'
+card_list1 = os.listdir(dirname)
 card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I']
+
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
@@ -16,7 +21,7 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.start_window = None
         self.setupUi(self)
         self.main_window = Game()
-        self.duration = 5
+        self.duration = 3
 
         self.start_button.clicked.connect(lambda: self.start())
         self.end_button.clicked.connect(lambda: exit_app())
@@ -49,8 +54,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         QTimer.singleShot(1, self.reset)
 
-        self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
-        self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
+        self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list1[0]))
+        self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list1[1]))
         self.button_3.clicked.connect(lambda: self.clicker(self.button_3, card_list[2]))
         self.button_4.clicked.connect(lambda: self.clicker(self.button_4, card_list[3]))
         self.button_5.clicked.connect(lambda: self.clicker(self.button_5, card_list[4]))
