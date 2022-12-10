@@ -8,9 +8,9 @@ import start_window
 import main_window
 
 # collecting names of cards' images in card_list
-dirname = 'static/img/cards'
-card_list = os.listdir(dirname)
-card_list = [(dirname + '/' + card) for card in card_list]
+path_to_dir = 'static/img/cards'
+card_list = os.listdir(path_to_dir)
+card_list = [(path_to_dir + '/' + card) for card in card_list]
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
 
@@ -31,14 +31,14 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         # open main window
         self.main_window.show()
 
-        # creating a timer for ... ?
+        # creating a timer for reversed count
         timer_update = QTimer()
         timer_update.timeout.connect(lambda: self.update_timer(timer_update))
         timer_update.start(1000)
 
-        # creating a timer for ... ?
+        # creating a timer for pictures collapsing
         timer = QTimer()
-        timer.singleShot(6000, lambda: self.main_window.reset(is_start=True))
+        timer.singleShot(4000, lambda: self.main_window.reset(is_start=True))
 
         window.hide()
 
@@ -47,7 +47,7 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         if self.duration == 0:
             timer.stop()
             self.main_window.label.setText('Observe the cards and memories them!')
-            self.duration = 5
+            self.duration = 3
         self.duration -= 1
 
 
@@ -55,10 +55,13 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     def __init__(self):
         super(Game, self).__init__()
         self.setupUi(self)
+
+        # {card's name : object of button}
         self.open_cards = {}
+
         self.score = 0
 
-        QTimer.singleShot(1, self.reset)
+        # QTimer.singleShot(1, self.reset)
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -81,21 +84,21 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.start_button.clicked.connect(lambda: self.reset())
         self.exit_button.clicked.connect(lambda: exit_app())
 
-    def check_pair(self, b, card_name):
-        object = card_name.replace(dirname + '/', '').rsplit('_',1)[0]
-        if object in self.open_cards.keys():
-            # b.setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
-            # self.open_cards[object].setStyleSheet('QPushButton {background-color: #5A5475; color: #FFB8CE;}')
+    def check_pair(self, bn, path_to_image):
+        card_image = path_to_image.replace(path_to_dir + '/', '').rsplit('_',1)[0]
+        if card_image in self.open_cards.keys():
             self.score += 1
             self.label_score1.setText(f'Score: {self.score}')
             return
-        self.open_cards[b.icon()] = b
+        self.open_cards[card_image] = bn
 
-    def clicker(self, b, card):
-        b.setIcon(QtGui.QIcon(card))
-        b.setEnabled(True)
+    def clicker(self, bn, path_to_image):
 
-        self.check_pair(b, card)
+        icon = QtGui.QIcon(path_to_image)
+        icon.path_to_image = path_to_image
+        bn.setIcon(icon)
+        # b.setEnabled(True)
+        self.check_pair(bn, icon.path_to_image)
 
     def reset(self, is_start=False):
         button_list = [
@@ -106,31 +109,31 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.button_13, self.button_14, self.button_15,
             self.button_16, self.button_17, self.button_18,
         ]
+
         shuffle(card_list)
         self.open_cards = {}
-
         self.score = 0
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
 
-        for index, b in enumerate(button_list):
-            self.reset_button(b, index, is_start)
+        for index, bn in enumerate(button_list):
+            self.reset_button(bn, index, is_start)
 
     def reset_button(self, button, card, is_start):
         if is_start:
            button.setEnabled(True)
-        # button.setIcon(QtGui.QIcon(card_list[card]))
-        button.setIconSize(QSize(100, 100))
+        button.setIcon(QtGui.QIcon(card_list[card]))
 
+        # size image to whole button
+        button.setIconSize(QSize(100, 100))
         #button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
-        #QTimer().singleShot(3000, lambda: self.update_text(button))
         QTimer().singleShot(3000, lambda: self.update_text(button))
 
 
     @staticmethod
     def update_text(button):
         button.setIcon(QtGui.QIcon('static\\background\\back_side.png'))
-        #button.setText('')
+        button.setText('')
 
 
 def exit_app():

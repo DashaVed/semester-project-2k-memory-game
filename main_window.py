@@ -277,6 +277,7 @@ class Ui_MainWindow(object):
         self.button_9.setText("")
         self.button_9.setObjectName("button_9")
         self.gridLayout.addWidget(self.button_9, 1, 2, 1, 1)
+        # create button 12
         self.button_12 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.button_12.setEnabled(False)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
