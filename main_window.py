@@ -322,19 +322,19 @@ class Ui_MainWindow(object):
         self.button_10.setText("")
         self.button_10.setObjectName("button_10")
         self.gridLayout.addWidget(self.button_10, 1, 3, 1, 1)
-        self.start_button = QtWidgets.QPushButton(self.centralwidget)
-        self.start_button.setGeometry(QtCore.QRect(116, 350, 105, 31))
+        self.reset_button = QtWidgets.QPushButton(self.centralwidget)
+        self.reset_button.setGeometry(QtCore.QRect(116, 350, 105, 31))
         font = QtGui.QFont()
         font.setFamily("Arial Narrow")
         font.setPointSize(16)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
-        self.start_button.setFont(font)
-        self.start_button.setStyleSheet("QLabel {\n"
+        self.reset_button.setFont(font)
+        self.reset_button.setStyleSheet("QLabel {\n"
 "border-radius: 20px;\n"
 "}")
-        self.start_button.setObjectName("start_button")
+        self.reset_button.setObjectName("reset_button")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(660, 20, 121, 151))
         self.groupBox.setStyleSheet("QGroupBox {\n"
@@ -418,7 +418,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.start_button.setText(_translate("MainWindow", "Reset"))
+        self.reset_button.setText(_translate("MainWindow", "Reset"))
         self.label_score1.setText(_translate("MainWindow", "Score: "))
         self.label_score2.setText(_translate("MainWindow", "Score: "))
         self.exit_button.setText(_translate("MainWindow", "Exit"))

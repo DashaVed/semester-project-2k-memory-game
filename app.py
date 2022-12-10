@@ -2,7 +2,7 @@ import pickle
 import socket
 import threading
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QMainWindow, QApplication
+from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget
 
 import start_window
 import main_window
@@ -23,10 +23,11 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.main_window = Game()
         self.duration = 5
 
-        self.start_button.clicked.connect(lambda: self.start())
+        self.start_button.clicked.connect(lambda: self.start_game())
         self.end_button.clicked.connect(lambda: exit_app())
 
-    def start(self):
+    def start_game(self):
+        client.send(pickle.dumps(self.start_button.objectName()))
         self.main_window.show()
         timer_update = QTimer()
         timer_update.timeout.connect(lambda: self.update_timer(timer_update))
@@ -34,10 +35,10 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         timer = QTimer()
         timer.singleShot(6000, lambda: self.main_window.reset(is_start=True))
 
+        window.hide()
+
         receive_thread = threading.Thread(target=self.main_window.receive)
         receive_thread.start()
-
-        window.hide()
 
     def update_timer(self, timer):
         self.main_window.label.setText(f'Game started in {self.duration} sec')
@@ -78,8 +79,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.button_16.clicked.connect(lambda: self.clicker(self.button_16, card_list[15]))
         self.button_17.clicked.connect(lambda: self.clicker(self.button_17, card_list[16]))
         self.button_18.clicked.connect(lambda: self.clicker(self.button_18, card_list[17]))
-        self.start_button.clicked.connect(lambda: self.reset())
         self.exit_button.clicked.connect(lambda: exit_app())
+        self.reset_button.clicked.connect(lambda: self.reset())
 
     def check_pair(self, b):
         value = b.text()
@@ -98,6 +99,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     def clicker(self, b, card):
         b.setText(card)
         b.setEnabled(False)
+
+        client.send(pickle.dumps(b.objectName()))
 
         self.check_pair(b)
 
@@ -121,9 +124,10 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score2.setText('Score: 0')
 
         for index, b in enumerate(button_list):
-            self.reset_button(b, index, is_start)
+            print(b)
+            self.get_reset_button(b, index, is_start)
 
-    def reset_button(self, button, card, is_start):
+    def get_reset_button(self, button, card, is_start):
         if is_start:
             button.setEnabled(True)
         button.setText(card_list[card])
@@ -137,7 +141,13 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     def receive(self):
         global card_list
         while True:
-            card_list = pickle.loads(client.recv(1024))
+            data = pickle.loads(client.recv(1024))
+            if isinstance(data, list):
+                card_list = data
+            else:
+                button_1 = self.ui.findChild(QPushButton, data)
+                print(button_1)
+                button_1.clicked.connect(lambda: self.clicker(button_1, card_list[0]))
 
 
 def exit_app():

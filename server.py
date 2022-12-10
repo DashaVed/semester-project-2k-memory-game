@@ -18,15 +18,24 @@ card_list = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G
 shuffle(card_list)
 
 
+def broadcast(data, index):
+    clients[(index + 1) // 2].send(pickle.dumps(data))
+
+
 def handle(client):
     while True:
         try:
-            client.send(pickle.dumps(card_list))
+            action = pickle.loads(client.recv(1024))
+            if action == 'start_button' or action == 'reset_button':
+                client.send(pickle.dumps(card_list))
+            else:
+                client_index = clients.index(client)
+                # отправить название кнопки, для которой выполняется нажатие
+                broadcast(action, client_index)
         except ValueError as e:
             clients.remove(client)
             client.close()
             break
-
 
 
 def receive():
