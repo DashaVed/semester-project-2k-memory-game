@@ -19,7 +19,7 @@ shuffle(card_list)
 
 
 def broadcast(data, index):
-    clients[(index + 1) // 2].send(pickle.dumps(data))
+    clients[(index + 1) % 2].send(pickle.dumps(data))
 
 
 def handle(client):
@@ -30,6 +30,7 @@ def handle(client):
                 client.send(pickle.dumps(card_list))
             else:
                 client_index = clients.index(client)
+                print('client index', client_index)
                 # отправить название кнопки, для которой выполняется нажатие
                 broadcast(action, client_index)
         except ValueError as e:

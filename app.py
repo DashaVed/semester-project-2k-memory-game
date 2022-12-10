@@ -2,7 +2,7 @@ import pickle
 import socket
 import threading
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton, QWidget
+from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
 
 import start_window
 import main_window
@@ -97,14 +97,15 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.open_card[b.text()] = b
 
     def clicker(self, b, card):
-        b.setText(card)
-        b.setEnabled(False)
+        if b.isEnabled():
+            b.setText(card)
+            b.setEnabled(False)
 
-        client.send(pickle.dumps(b.objectName()))
+            client.send(pickle.dumps(b.objectName()))
 
-        self.check_pair(b)
+            self.check_pair(b)
 
-        self.first_turn = False if self.first_turn is True else True
+            self.first_turn = False if self.first_turn is True else True
 
     def reset(self, is_start=False):
         button_list = [
@@ -124,7 +125,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score2.setText('Score: 0')
 
         for index, b in enumerate(button_list):
-            print(b)
             self.get_reset_button(b, index, is_start)
 
     def get_reset_button(self, button, card, is_start):
@@ -132,7 +132,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             button.setEnabled(True)
         button.setText(card_list[card])
         button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
-        QTimer().singleShot(3000, lambda: self.update_text(button))
+        QTimer().singleShot(1000, lambda: self.update_text(button))
 
     @staticmethod
     def update_text(button):
@@ -145,9 +145,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             if isinstance(data, list):
                 card_list = data
             else:
-                button_1 = self.ui.findChild(QPushButton, data)
-                print(button_1)
-                button_1.clicked.connect(lambda: self.clicker(button_1, card_list[0]))
+                button = self.findChild(QPushButton, data)
+                index = int(data.split('_')[1])  # получить номер кнопки
+                self.clicker(button, card_list[index - 1])
 
 
 def exit_app():
