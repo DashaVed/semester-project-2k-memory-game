@@ -1,16 +1,16 @@
 from PyQt6.QtCore import QTimer, QSize
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6 import QtGui
-from random import shuffle, randint
+from random import shuffle
 import os
 
 import start_window
 import main_window
 
 # collecting names of cards' images in card_list
-path_to_dir = 'static/img/cards'
-card_list = os.listdir(path_to_dir)
-card_list = [(path_to_dir + '/' + card) for card in card_list]
+PATH_TO_DIR = 'static/img/cards'
+card_list = os.listdir(PATH_TO_DIR)
+card_list = [(PATH_TO_DIR + '/' + card) for card in card_list]
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
 
@@ -61,8 +61,6 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         self.score = 0
 
-        # QTimer.singleShot(1, self.reset)
-
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
         self.button_3.clicked.connect(lambda: self.clicker(self.button_3, card_list[2]))
@@ -84,12 +82,31 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.start_button.clicked.connect(lambda: self.reset())
         self.exit_button.clicked.connect(lambda: exit_app())
 
+    @staticmethod
+    def turn_over_card(card):
+        card.setIcon(QtGui.QIcon('static/img/background/back_side.png'))
+        card.setIconSize(QSize(200, 200))
+        return
+
+    @staticmethod
+    def highlight_card(card):
+        card.setStyleSheet("background-color: #E37936;")
+        return
+
     def check_pair(self, bn, path_to_image):
-        card_image = path_to_image.replace(path_to_dir + '/', '').rsplit('_',1)[0]
+        card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
         if card_image in self.open_cards.keys():
             self.score += 1
             self.label_score1.setText(f'Score: {self.score}')
+
+            def get_rid_of_card(card):
+                self.highlight_card(card)
+                QTimer().singleShot(1000, lambda: self.turn_over_card(card))
+
+            get_rid_of_card(self.open_cards[card_image])
+            get_rid_of_card(bn)
             return
+
         self.open_cards[card_image] = bn
 
     def clicker(self, bn, path_to_image):
@@ -122,18 +139,18 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     def reset_button(self, button, card, is_start):
         if is_start:
            button.setEnabled(True)
+
         button.setIcon(QtGui.QIcon(card_list[card]))
 
         # size image to whole button
         button.setIconSize(QSize(100, 100))
-        #button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
+        button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
         QTimer().singleShot(3000, lambda: self.update_text(button))
 
 
     @staticmethod
     def update_text(button):
         button.setIcon(QtGui.QIcon('static\\background\\back_side.png'))
-        button.setText('')
 
 
 def exit_app():
