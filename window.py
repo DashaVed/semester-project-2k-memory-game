@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QTimer, QSize
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6 import QtGui
+from PyQt6.QtGui import QPixmap
 from random import shuffle
 import os
 
@@ -84,14 +85,13 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
     @staticmethod
     def turn_over_card(card):
-        card.setIcon(QtGui.QIcon('static/img/background/back_side.png'))
-        card.setIconSize(QSize(200, 200))
-        return
+        card.setIcon(QtGui.QIcon())
+        card.setStyleSheet("background-color: #464258;")
 
-    @staticmethod
-    def highlight_card(card):
-        card.setStyleSheet("background-color: #E37936;")
-        return
+    def get_rid_of_card(self, bn):
+        bn.setStyleSheet("QPushButton{background-color: #E37936;}")
+
+        QTimer().singleShot(1000, lambda: self.turn_over_card(bn))
 
     def check_pair(self, bn, path_to_image):
         card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
@@ -99,23 +99,27 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.score += 1
             self.label_score1.setText(f'Score: {self.score}')
 
-            def get_rid_of_card(card):
-                self.highlight_card(card)
-                QTimer().singleShot(1000, lambda: self.turn_over_card(card))
-
-            get_rid_of_card(self.open_cards[card_image])
-            get_rid_of_card(bn)
-            return
+            self.get_rid_of_card(self.open_cards[card_image])
+            self.get_rid_of_card(bn)
 
         self.open_cards[card_image] = bn
+
+
 
     def clicker(self, bn, path_to_image):
 
         icon = QtGui.QIcon(path_to_image)
         icon.path_to_image = path_to_image
+        
+        icon.addPixmap()
         bn.setIcon(icon)
-        # b.setEnabled(True)
+
+        bn.setEnabled(False)
+        bn.setStyleSheet("QPushButton{background-image:" + path_to_image + ";}")
+        # bn.setStyleSheet("QStyle::drawComplexControl()")
         self.check_pair(bn, icon.path_to_image)
+        print(path_to_image)
+
 
     def reset(self, is_start=False):
         button_list = [
@@ -144,8 +148,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         # size image to whole button
         button.setIconSize(QSize(100, 100))
-        button.setStyleSheet('QPushButton {background-color: #716799; color: #FFF352;}')
-        QTimer().singleShot(3000, lambda: self.update_text(button))
+        button.setStyleSheet("QPalette::Disabled")
+        QTimer().singleShot(1000, lambda: self.update_text(button))
 
 
     @staticmethod
