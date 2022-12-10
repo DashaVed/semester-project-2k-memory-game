@@ -579,7 +579,7 @@ border: 1px solid #716799;
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="start_button">
+   <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
       <x>116</x>
@@ -642,7 +642,7 @@ border: 1px solid #514С66;
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>static/img/avatar1.jpg</pixmap>
+      <pixmap>static/img/avatars/girl1.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -701,16 +701,16 @@ border: 1px solid #514С66;
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>0</y>
        <width>101</width>
-       <height>111</height>
+       <height>121</height>
       </rect>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>static/img/avatar2.jpg</pixmap>
+      <pixmap>static/img/avatars/girl2.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

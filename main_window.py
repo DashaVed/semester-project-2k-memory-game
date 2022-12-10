@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'main2.ui'
+# Form implementation generated from reading ui file 'main.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.0
 #
@@ -322,19 +322,19 @@ class Ui_MainWindow(object):
         self.button_10.setText("")
         self.button_10.setObjectName("button_10")
         self.gridLayout.addWidget(self.button_10, 1, 3, 1, 1)
-        self.start_button = QtWidgets.QPushButton(self.centralwidget)
-        self.start_button.setGeometry(QtCore.QRect(116, 350, 105, 31))
+        self.reset_button = QtWidgets.QPushButton(self.centralwidget)
+        self.reset_button.setGeometry(QtCore.QRect(116, 350, 105, 31))
         font = QtGui.QFont()
         font.setFamily("Arial Narrow")
         font.setPointSize(16)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
-        self.start_button.setFont(font)
-        self.start_button.setStyleSheet("QLabel {\n"
+        self.reset_button.setFont(font)
+        self.reset_button.setStyleSheet("QLabel {\n"
 "border-radius: 20px;\n"
 "}")
-        self.start_button.setObjectName("start_button")
+        self.reset_button.setObjectName("reset_button")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox.setGeometry(QtCore.QRect(660, 20, 121, 151))
         self.groupBox.setStyleSheet("QGroupBox {\n"
@@ -346,7 +346,7 @@ class Ui_MainWindow(object):
         self.label_profile1.setGeometry(QtCore.QRect(10, 10, 101, 111))
         self.label_profile1.setMinimumSize(QtCore.QSize(100, 101))
         self.label_profile1.setText("")
-        self.label_profile1.setPixmap(QtGui.QPixmap("static/img/avatar1.jpg"))
+        self.label_profile1.setPixmap(QtGui.QPixmap("static/img/avatars/girl1.png"))
         self.label_profile1.setScaledContents(True)
         self.label_profile1.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_profile1.setWordWrap(False)
@@ -370,9 +370,9 @@ class Ui_MainWindow(object):
         self.groupBox_2.setTitle("")
         self.groupBox_2.setObjectName("groupBox_2")
         self.label_profile2 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_profile2.setGeometry(QtCore.QRect(10, 10, 101, 111))
+        self.label_profile2.setGeometry(QtCore.QRect(10, 0, 101, 121))
         self.label_profile2.setText("")
-        self.label_profile2.setPixmap(QtGui.QPixmap("static/img/avatar2.jpg"))
+        self.label_profile2.setPixmap(QtGui.QPixmap("static/img/avatars/girl2.png"))
         self.label_profile2.setScaledContents(True)
         self.label_profile2.setObjectName("label_profile2")
         self.label_score2 = QtWidgets.QLabel(self.groupBox_2)
@@ -418,7 +418,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.start_button.setText(_translate("MainWindow", "Reset"))
+        self.reset_button.setText(_translate("MainWindow", "Reset"))
         self.label_score1.setText(_translate("MainWindow", "Score: "))
         self.label_score2.setText(_translate("MainWindow", "Score: "))
         self.exit_button.setText(_translate("MainWindow", "Exit"))
