@@ -45,6 +45,10 @@ background-color: #716799;
 border-radius: 2px;
 }
 
+QPushButton:disabled {
+background-color: #716799;
+background-image: 'static/img/cards/pot_1.png'}
+
 QLabel {
 border-radius: 20px;
 color: #FFB8CE;

@@ -17,7 +17,6 @@ clients = []
 PATH_TO_DIR = 'static/img/cards'
 card_list = os.listdir(PATH_TO_DIR)
 card_list = [(PATH_TO_DIR + '/' + card) for card in card_list]
-print(card_list)
 shuffle(card_list)
 
 
@@ -33,9 +32,9 @@ def handle(client):
                 client.send(pickle.dumps(card_list))
             else:
                 client_index = clients.index(client)
-                # отправить название кнопки, для которой выполняется нажатие
                 broadcast(action, client_index)
         except ValueError as e:
+            print(e)
             clients.remove(client)
             client.close()
             break

@@ -1,8 +1,9 @@
 import pickle
 import socket
 import threading
-from PyQt6.QtCore import QTimer, QSize
-from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
+
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
 from PyQt6 import QtGui
 
 import os
@@ -17,6 +18,19 @@ card_list = [(PATH_TO_DIR + '/' + card) for card in card_list]
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 5060))
+
+
+class WorkThread(QThread):
+    threadSignal = pyqtSignal(name='start')
+    threadFinish = pyqtSignal(name='finish')
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self, *args, **kwargs):
+        self.threadSignal.emit()
+        print('in threads')
+        self.threadFinish.emit()
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
@@ -63,6 +77,15 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.score2 = 0
 
         self.first_turn = True
+        self.button_list = [
+            self.button_1, self.button_2, self.button_3,
+            self.button_4, self.button_5, self.button_6,
+            self.button_7, self.button_8, self.button_9,
+            self.button_10, self.button_11, self.button_12,
+            self.button_13, self.button_14, self.button_15,
+            self.button_16, self.button_17, self.button_18,
+        ]
+        self.hide_button = []
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -85,20 +108,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.exit_button.clicked.connect(lambda: exit_app())
         self.reset_button.clicked.connect(lambda: self.reset())
 
-    @staticmethod
-    def turn_over_card(card):
-        card.setIcon(QtGui.QIcon())
-        card.setStyleSheet('background-color: #464258;')
-        # card.setIcon(QtGui.QIcon('static/img/background/back_side.png'))
-        # card.setIconSize(QSize(200, 200))
-
-    def get_rid_of_card(self, card):
-        card.setStyleSheet("background-color: #E37936;")
-        QTimer().singleShot(1000, lambda: self.turn_over_card(card))
-
     def check_pair(self, bn, path_to_image):
         card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
-        print(card_image)
         if card_image in self.open_cards.keys():
             if self.first_turn:
                 self.score1 += 1
@@ -107,34 +118,50 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 self.score2 += 1
                 self.label_score2.setText(f'Score: {self.score2}')
 
-            self.get_rid_of_card(self.open_cards[card_image])
-            self.get_rid_of_card(bn)
+            # self.thread1 = WorkThread()
+            # self.thread1.threadSignal.connect(lambda: self.get_rid_of_card(self.open_cards[card_image]))
+            # self.thread1.threadFinish.connect(self.finish)
+            # # self.get_rid_of_card(self.open_cards[card_image])
+            # # self.get_rid_of_card(bn)
+            # self.thread2 = WorkThread()
+            # self.thread2.threadSignal.connect(lambda: self.get_rid_of_card(bn))
+            # self.thread2.threadFinish.connect(self.finish)
+            #
+            # self.thread1.start()
+            # self.thread2.start()
+            bn.setStyleSheet("background-color: #E37936;")
+            self.open_cards[card_image].setStyleSheet("background-color: #E37936;")
+            self.hide_button.append(bn)
+            self.hide_button.append(self.open_cards[card_image])
+            if len(self.hide_button) == 18:
+                self.clear_button()
             return
 
         self.open_cards[card_image] = bn
 
+    def clear_button(self):
+        for button in self.hide_button:
+            if button.signalsBlocked():
+                button.setIcon(QtGui.QIcon())
+                button.setStyleSheet('background-color: #464258;')
+
+    def finish(self):
+        print('Finish!', self.open_cards)
+
     def clicker(self, bn, path_to_image):
-        if bn.isEnabled():
-            icon = QtGui.QIcon(path_to_image)
-            # icon.path_to_image = path_to_image
-            bn.setIcon(icon)
-            bn.setEnabled(False)
+        self.clear_button()
+        icon = QtGui.QIcon(path_to_image)
+        bn.setIcon(icon)
+        bn.blockSignals(True)
+        # bn.setEnabled(False)
 
-            client.send(pickle.dumps(bn.objectName()))
+        client.send(pickle.dumps(bn.objectName()))
 
-            self.check_pair(bn, path_to_image)
+        self.check_pair(bn, path_to_image)
 
-            self.first_turn = False if self.first_turn is True else True
+        self.first_turn = False if self.first_turn is True else True
 
     def reset(self, is_start=False):
-        button_list = [
-            self.button_1, self.button_2, self.button_3,
-            self.button_4, self.button_5, self.button_6,
-            self.button_7, self.button_8, self.button_9,
-            self.button_10, self.button_11, self.button_12,
-            self.button_13, self.button_14, self.button_15,
-            self.button_16, self.button_17, self.button_18,
-        ]
         self.open_cards = {}
 
         self.score1 = 0
@@ -143,7 +170,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
 
-        for index, b in enumerate(button_list):
+        for index, b in enumerate(self.button_list):
             self.get_reset_button(b, index, is_start)
 
     def get_reset_button(self, button, card, is_start):
@@ -155,6 +182,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         button.setIconSize(QSize(100, 100))
         #
         QTimer().singleShot(3000, lambda: self.update_img(button))
+
 
     @staticmethod
     def update_img(button):
@@ -169,8 +197,9 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 card_list = data
             else:
                 button = self.findChild(QPushButton, data)
-                index = int(data.split('_')[1])  # получить номер кнопки
-                self.clicker(button, card_list[index - 1])
+                if not button.signalsBlocked():
+                    index = int(data.split('_')[1])  # получить номер кнопки
+                    self.clicker(button, card_list[index - 1])
 
 
 def exit_app():
