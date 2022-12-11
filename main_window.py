@@ -32,10 +32,6 @@ class Ui_MainWindow(object):
 "border-radius: 2px;\n"
 "}\n"
 "\n"
-"QPushButton:disabled {\n"
-"background-color: #716799;\n"
-"background-image: \'static/img/cards/pot_1.png\'}\n"
-"\n"
 "QLabel {\n"
 "border-radius: 20px;\n"
 "color: #FFB8CE;\n"
@@ -423,6 +419,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.reset_button.setText(_translate("MainWindow", "Reset"))
-        self.label_score1.setText(_translate("MainWindow", "Score: "))
-        self.label_score2.setText(_translate("MainWindow", "Score: "))
+        self.label_score1.setText(_translate("MainWindow", "Score: 0"))
+        self.label_score2.setText(_translate("MainWindow", "Score: 0"))
         self.exit_button.setText(_translate("MainWindow", "Exit"))

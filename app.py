@@ -1,6 +1,5 @@
 import pickle
 import socket
-import os
 import threading
 
 from PyQt6.QtWidgets import *
@@ -10,11 +9,9 @@ from PyQt6 import QtGui
 import start_window
 import main_window
 
-# collecting names of cards' images in card_list
-PATH_TO_DIR = 'static/img/cards'
-card_list = os.listdir(PATH_TO_DIR)
-card_list = [(PATH_TO_DIR + '/' + card) for card in card_list]
 
+PATH_TO_DIR = 'static/img/cards'
+card_list = []
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 5060))
@@ -49,8 +46,8 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
     def update_timer(self, timer):
         self.main_window.label.setText(f'Game started in {self.duration} sec')
         if self.duration == 0:
-            timer.stop()
             self.main_window.label.setText('Observe the cards and memories them!')
+            timer.stop()
             self.duration = 3
         self.duration -= 1
 
@@ -73,6 +70,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.button_16, self.button_17, self.button_18,
         ]
         self.hide_button = []
+        self.count = 0
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -105,29 +103,32 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 self.score2 += 1
                 self.label_score2.setText(f'Score: {self.score2}')
 
-            bn.setStyleSheet("background-color: #E37936;")
-            self.open_cards[card_image].setStyleSheet("background-color: #E37936;")
+            bn.setStyleSheet("QPushButton {background: #ffffff;}")
+            self.open_cards[card_image].setStyleSheet("QPushButton {background: #ffffff;}")
 
             self.hide_button.append(bn)
             self.hide_button.append(self.open_cards[card_image])
-            if len(self.hide_button) == 18:
+            self.count += 2
+            if self.count == 18:
                 self.clear_button()
             return
         self.open_cards[card_image] = bn
 
     def clear_button(self):
         for button in self.hide_button:
-            if button.signalsBlocked():
-                button.setIcon(QtGui.QIcon())
-                button.setStyleSheet('background-color: #464258;')
+            button.setIcon(QtGui.QIcon())
+            button.setStyleSheet('QPushButton {background: #464258;}')
+        self.hide_button = []
 
-    def clicker(self, bn, path_to_image):
+    def clicker(self, bn, path_to_image, from_server=False):
         self.clear_button()
+
+        if not from_server:
+            client.send(pickle.dumps(bn.objectName()))
+
         icon = QtGui.QIcon(path_to_image)
         bn.setIcon(icon)
         bn.blockSignals(True)
-
-        client.send(pickle.dumps(bn.objectName()))
 
         self.check_pair(bn, path_to_image)
 
@@ -135,6 +136,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
     def reset(self, is_start=False):
         self.open_cards = {}
+        self.hide_button = []
+        self.count = 0
 
         self.score1 = 0
         self.score2 = 0
@@ -155,7 +158,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     @staticmethod
     def update_img(button):
         button.setIcon(QtGui.QIcon())
-        button.setStyleSheet('background-color: #716799;')
+        button.setStyleSheet('QPushButton {background: #716799;}')
 
     def receive(self):
         global card_list
@@ -166,8 +169,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             else:
                 button = self.findChild(QPushButton, data)
                 if not button.signalsBlocked():
-                    index = int(data.split('_')[1])  # получить номер кнопки
-                    self.clicker(button, card_list[index - 1])
+                    index = int(data.split('_')[1])
+                    self.clicker(button, card_list[index - 1], from_server=True)
 
 
 def exit_app():
