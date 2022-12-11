@@ -1,8 +1,9 @@
 from PyQt6.QtCore import QTimer, QSize
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6 import QtGui
-from PyQt6.QtGui import QPixmap
+
 from random import shuffle
+from collections import defaultdict
 import os
 
 import start_window
@@ -34,16 +35,16 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
 
         # creating a timer for reversed count
         timer_update = QTimer()
-        timer_update.timeout.connect(lambda: self.update_timer(timer_update))
+        timer_update.timeout.connect(lambda: self.countdown(timer_update))
         timer_update.start(1000)
 
-        # creating a timer for pictures collapsing
+        # creating a timer for collapsing pictures
         timer = QTimer()
         timer.singleShot(4000, lambda: self.main_window.reset(is_start=True))
 
         window.hide()
 
-    def update_timer(self, timer):
+    def countdown(self, timer):
         self.main_window.label.setText(f'Game starts in {self.duration} seconds')
         if self.duration == 0:
             timer.stop()
@@ -57,8 +58,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         super(Game, self).__init__()
         self.setupUi(self)
 
-        # {card's name : object of button}
-        self.open_cards = {}
+        # dictionary holds button objects
+        self.open_buttons = {}
 
         self.score = 0
 
@@ -89,36 +90,50 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         card.setStyleSheet("background-color: #464258;")
 
     def get_rid_of_card(self, bn):
-        bn.setStyleSheet("QPushButton{background-color: #E37936;}")
 
+        bn.setStyleSheet("QPushButton{background-color: #E37936;}")
         QTimer().singleShot(1000, lambda: self.turn_over_card(bn))
 
-    def check_pair(self, bn, path_to_image):
-        card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
-        if card_image in self.open_cards.keys():
-            self.score += 1
-            self.label_score1.setText(f'Score: {self.score}')
+    def check_pair(self, bn, path_to_image, check_state):
+        if not check_state:
 
-            self.get_rid_of_card(self.open_cards[card_image])
-            self.get_rid_of_card(bn)
+            card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
+            card_number = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[1]
+            print(card_number, card_image)
 
-        self.open_cards[card_image] = bn
+            if (card_image in self.open_buttons.keys()) and (self.open_buttons != None):
+                if (self.open_cards[card_image] != None) and (self.open_cards[card_image] != None):
+                    if (card_number not in self.open_cards[card_image]):
+                        print(self.open_cards[card_image])
+                        self.score += 1
+                        self.label_score1.setText(f'Score: {self.score}')
+
+                        self.get_rid_of_card(self.open_buttons[card_image])
+                        self.get_rid_of_card(bn)
+
+            self.open_buttons[card_image] = bn
+            self.open_cards[card_image].append(card_number)
+
+        else:
+            pass
 
 
-
+    # SLOT
     def clicker(self, bn, path_to_image):
 
-        icon = QtGui.QIcon(path_to_image)
-        icon.path_to_image = path_to_image
-        
-        icon.addPixmap()
-        bn.setIcon(icon)
+        def open_icons(path, button):
+            icon = QtGui.QIcon(path_to_image)
+            icon.path_to_image = path_to_image
+            button.setIcon(icon)
 
-        bn.setEnabled(False)
-        bn.setStyleSheet("QPushButton{background-image:" + path_to_image + ";}")
-        # bn.setStyleSheet("QStyle::drawComplexControl()")
-        self.check_pair(bn, icon.path_to_image)
-        print(path_to_image)
+        def button_was_released(self, button):
+            self.is_checked = button.isChecked()
+            return self.is_checked
+
+        bn.setCheckable(True)
+        self.is_checked = False
+        self.check_pair(bn, icon.path_to_image, button_was_released(self,bn))
+        bn.setCheckable(False)
 
 
     def reset(self, is_start=False):
@@ -132,7 +147,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         ]
 
         shuffle(card_list)
-        self.open_cards = {}
+        self.open_buttons = {}
+        self.open_cards = defaultdict(list)
         self.score = 0
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
@@ -140,21 +156,20 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         for index, bn in enumerate(button_list):
             self.reset_button(bn, index, is_start)
 
+
     def reset_button(self, button, card, is_start):
         if is_start:
            button.setEnabled(True)
 
         button.setIcon(QtGui.QIcon(card_list[card]))
 
-        # size image to whole button
         button.setIconSize(QSize(100, 100))
-        button.setStyleSheet("QPalette::Disabled")
-        QTimer().singleShot(1000, lambda: self.update_text(button))
+        QTimer().singleShot(1000, lambda: self.cover_buttons(button))
 
 
     @staticmethod
-    def update_text(button):
-        button.setIcon(QtGui.QIcon('static\\background\\back_side.png'))
+    def cover_buttons(button):
+         button.setIcon(QtGui.QIcon('static\\background\\back_side.png'))
 
 
 def exit_app():
