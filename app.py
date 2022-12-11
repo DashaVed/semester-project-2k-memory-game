@@ -1,12 +1,12 @@
 import pickle
 import socket
+import os
 import threading
 
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6 import QtGui
 
-import os
 import start_window
 import main_window
 
@@ -18,19 +18,6 @@ card_list = [(PATH_TO_DIR + '/' + card) for card in card_list]
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 5060))
-
-
-class WorkThread(QThread):
-    threadSignal = pyqtSignal(name='start')
-    threadFinish = pyqtSignal(name='finish')
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self, *args, **kwargs):
-        self.threadSignal.emit()
-        print('in threads')
-        self.threadFinish.emit()
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
