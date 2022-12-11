@@ -90,21 +90,20 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         card.setStyleSheet("background-color: #464258;")
 
     def get_rid_of_card(self, bn):
-
         bn.setStyleSheet("QPushButton{background-color: #E37936;}")
         QTimer().singleShot(1000, lambda: self.turn_over_card(bn))
 
     def check_pair(self, bn, path_to_image, check_state):
-        if not check_state:
-
+        self.open_icons(path_to_image, bn)
+        if True:
             card_image = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[0]
             card_number = path_to_image.replace(PATH_TO_DIR + '/', '').rsplit('_', 1)[1]
-            print(card_number, card_image)
 
             if (card_image in self.open_buttons.keys()) and (self.open_buttons != None):
+
                 if (self.open_cards[card_image] != None) and (self.open_cards[card_image] != None):
+
                     if (card_number not in self.open_cards[card_image]):
-                        print(self.open_cards[card_image])
                         self.score += 1
                         self.label_score1.setText(f'Score: {self.score}')
 
@@ -117,14 +116,14 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         else:
             pass
 
+    def open_icons(self, path, button):
+        icon = QtGui.QIcon(path)
+        icon.path = path
+        button.setIcon(icon)
+
 
     # SLOT
     def clicker(self, bn, path_to_image):
-
-        def open_icons(path, button):
-            icon = QtGui.QIcon(path_to_image)
-            icon.path_to_image = path_to_image
-            button.setIcon(icon)
 
         def button_was_released(self, button):
             self.is_checked = button.isChecked()
@@ -132,8 +131,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         bn.setCheckable(True)
         self.is_checked = False
-        self.check_pair(bn, icon.path_to_image, button_was_released(self,bn))
-        bn.setCheckable(False)
+        self.check_pair(bn, path_to_image, button_was_released(self,bn))
+        # bn.setCheckable(False)
 
 
     def reset(self, is_start=False):
