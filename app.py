@@ -118,25 +118,14 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 self.score2 += 1
                 self.label_score2.setText(f'Score: {self.score2}')
 
-            # self.thread1 = WorkThread()
-            # self.thread1.threadSignal.connect(lambda: self.get_rid_of_card(self.open_cards[card_image]))
-            # self.thread1.threadFinish.connect(self.finish)
-            # # self.get_rid_of_card(self.open_cards[card_image])
-            # # self.get_rid_of_card(bn)
-            # self.thread2 = WorkThread()
-            # self.thread2.threadSignal.connect(lambda: self.get_rid_of_card(bn))
-            # self.thread2.threadFinish.connect(self.finish)
-            #
-            # self.thread1.start()
-            # self.thread2.start()
             bn.setStyleSheet("background-color: #E37936;")
             self.open_cards[card_image].setStyleSheet("background-color: #E37936;")
+
             self.hide_button.append(bn)
             self.hide_button.append(self.open_cards[card_image])
             if len(self.hide_button) == 18:
                 self.clear_button()
             return
-
         self.open_cards[card_image] = bn
 
     def clear_button(self):
@@ -145,15 +134,11 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 button.setIcon(QtGui.QIcon())
                 button.setStyleSheet('background-color: #464258;')
 
-    def finish(self):
-        print('Finish!', self.open_cards)
-
     def clicker(self, bn, path_to_image):
         self.clear_button()
         icon = QtGui.QIcon(path_to_image)
         bn.setIcon(icon)
         bn.blockSignals(True)
-        # bn.setEnabled(False)
 
         client.send(pickle.dumps(bn.objectName()))
 
@@ -177,12 +162,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         if is_start:
             button.setEnabled(True)
         button.setIcon(QtGui.QIcon(card_list[card]))
-
-        # size image to whole button
         button.setIconSize(QSize(100, 100))
-        #
         QTimer().singleShot(3000, lambda: self.update_img(button))
-
 
     @staticmethod
     def update_img(button):
