@@ -32,6 +32,10 @@ class Ui_MainWindow(object):
 "border-radius: 2px;\n"
 "}\n"
 "\n"
+"QPushButton:disabled {\n"
+"background-color: #716799;\n"
+"background-image: \'static/img/cards/pot_1.png\'}\n"
+"\n"
 "QLabel {\n"
 "border-radius: 20px;\n"
 "color: #FFB8CE;\n"
@@ -277,7 +281,6 @@ class Ui_MainWindow(object):
         self.button_9.setText("")
         self.button_9.setObjectName("button_9")
         self.gridLayout.addWidget(self.button_9, 1, 2, 1, 1)
-        # create button 12
         self.button_12 = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.button_12.setEnabled(False)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Fixed)
