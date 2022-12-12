@@ -31,6 +31,7 @@ def handle(client):
     while True:
         try:
             action = pickle.loads(client.recv(1024))
+            print(action)
             if action == 'start_button' or action == 'reset_button':
                 count_player += 1
                 data = [card_list, count_player]
