@@ -103,8 +103,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
                 self.score2 += 1
                 self.label_score2.setText(f'Score: {self.score2}')
 
-            bn.setStyleSheet("QPushButton {background: #ffffff;}")
-            self.open_cards[card_image].setStyleSheet("QPushButton {background: #ffffff;}")
+            bn.setStyleSheet("QPushButton {background: #E37936;}")
+            self.open_cards[card_image].setStyleSheet("QPushButton {background: #E37936;}")
 
             self.hide_button.append(bn)
             self.hide_button.append(self.open_cards[card_image])
