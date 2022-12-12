@@ -125,6 +125,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.hide_button.append(self.open_cards[card_image])
             self.count_hide_btn += 2
             if self.count_hide_btn == 18:
+                self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 1px solid #FFB8CE;}')
+                self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 1px solid #FFB8CE;}')
                 self.clear_button()
             return
         self.open_cards[card_image] = bn
@@ -135,19 +137,36 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             button.setStyleSheet('QPushButton {background: #464258;}')
         self.hide_button = []
 
+    def change_label(self):
+        if (self.first_turn is True and count_player == 1) or \
+                (self.first_turn is False and count_player == 2):
+            self.label.setText('Your turn')
+        else:
+            self.label.setText("Opponent's turn")
+        if self.first_turn:
+            self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 4px solid #FFB8CE;}')
+            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 1px solid #FFB8CE;}')
+        else:
+            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 4px solid #FFB8CE;}')
+            self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 1px solid #FFB8CE;}')
+
     def clicker(self, bn, path_to_image, from_server=False):
-        self.clear_button()
 
-        if not from_server:
-            client.send(pickle.dumps(bn.objectName()))
+        if (count_player == 1 and self.first_turn is True) or \
+                (count_player == 2 and self.first_turn is False) or from_server:
+            self.clear_button()
 
-        icon = QtGui.QIcon(path_to_image)
-        bn.setIcon(icon)
-        bn.blockSignals(True)
+            if not from_server:
+                client.send(pickle.dumps(bn.objectName()))
 
-        self.check_pair(bn, path_to_image)
+            icon = QtGui.QIcon(path_to_image)
+            bn.setIcon(icon)
+            bn.blockSignals(True)
 
-        self.first_turn = False if self.first_turn is True else True
+            self.check_pair(bn, path_to_image)
+
+            self.first_turn = False if self.first_turn is True else True
+            self.change_label()
 
     def reset(self):
         self.open_cards = {}
@@ -191,10 +210,14 @@ def exit_app():
 
 def update_timer(game):
     while game.duration != 0:
-        game.label.setText(f'Game started in {game.duration} sec')
+        game.label.setText(f'Game starts in {game.duration} seconds')
         game.duration -= 1
         time.sleep(1)
-    game.label.setText('Observe the cards and memories them!')
+    if count_player == 1:
+        game.label.setText('Your turn')
+        game.groupBox.setStyleSheet('QGroupBox#groupBox{border: 4px solid #FFB8CE;}')
+    else:
+        game.label.setText("Opponent's turn")
 
 
 def create_thread(game):
