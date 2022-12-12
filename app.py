@@ -84,16 +84,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.duration = 3
 
         self.first_turn = True
-        self.button_list = [
-            self.button_1, self.button_2, self.button_3,
-            self.button_4, self.button_5, self.button_6,
-            self.button_7, self.button_8, self.button_9,
-            self.button_10, self.button_11, self.button_12,
-            self.button_13, self.button_14, self.button_15,
-            self.button_16, self.button_17, self.button_18,
-        ]
         self.hide_button = []
-        self.count = 0
+        self.count_hide_btn = 0
 
         self.button_1.clicked.connect(lambda: self.clicker(self.button_1, card_list[0]))
         self.button_2.clicked.connect(lambda: self.clicker(self.button_2, card_list[1]))
@@ -131,8 +123,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
             self.hide_button.append(bn)
             self.hide_button.append(self.open_cards[card_image])
-            self.count += 2
-            if self.count == 18:
+            self.count_hide_btn += 2
+            if self.count_hide_btn == 18:
                 self.clear_button()
             return
         self.open_cards[card_image] = bn
@@ -160,7 +152,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
     def reset(self):
         self.open_cards = {}
         self.hide_button = []
-        self.count = 0
+        self.count_hide_btn = 0
+        self.duration = 3
 
         self.score1 = 0
         self.score2 = 0
@@ -168,7 +161,16 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score1.setText('Score: 0')
         self.label_score2.setText('Score: 0')
 
-        for index, b in enumerate(self.button_list):
+        button_list = [
+            self.button_1, self.button_2, self.button_3,
+            self.button_4, self.button_5, self.button_6,
+            self.button_7, self.button_8, self.button_9,
+            self.button_10, self.button_11, self.button_12,
+            self.button_13, self.button_14, self.button_15,
+            self.button_16, self.button_17, self.button_18,
+        ]
+
+        for index, b in enumerate(button_list):
             self.get_reset_button(b, index)
 
     def get_reset_button(self, button, card):
@@ -209,7 +211,6 @@ def receive(game):
         if isinstance(data, list):
             card_list, count_player = data[0], data[1]
             if count_player == 1:
-                print('trying for first people')
                 game.label.setText('Waiting for another player to connect...')
             else:
                 client.send(pickle.dumps('two players'))
