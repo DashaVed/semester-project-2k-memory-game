@@ -209,6 +209,7 @@ def receive(game):
         if isinstance(data, list):
             card_list, count_player = data[0], data[1]
             if count_player == 1:
+                print('trying for first people')
                 game.label.setText('Waiting for another player to connect...')
             else:
                 client.send(pickle.dumps('two players'))
