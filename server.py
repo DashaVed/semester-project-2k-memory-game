@@ -31,10 +31,15 @@ def handle(client):
     while True:
         try:
             action = pickle.loads(client.recv(1024))
-            if action == 'start_button' or action == 'reset_button':
+            if action == 'start_button':
                 count_player += 1
                 data = [card_list, count_player]
                 client.send(pickle.dumps(data))
+            elif action == 'reset_button':
+                shuffle(card_list)
+                data = [card_list, 'reset']
+                for c in clients:
+                    c.send(pickle.dumps(data))
             else:
                 client_index = clients.index(client)
                 broadcast(action, client_index)
