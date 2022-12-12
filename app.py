@@ -1,6 +1,8 @@
 import pickle
 import socket
-import threading
+import time
+import traceback
+import sys
 
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
@@ -15,16 +17,47 @@ card_list = []
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 5060))
+count_player = None
+
+
+class WorkerSignals(QObject):
+    finished = pyqtSignal(name='finish')
+    error = pyqtSignal(tuple, name='error')
+    result = pyqtSignal(name='result')
+    progress = pyqtSignal(int, name='progress')
+
+
+class Worker(QRunnable):
+    def __init__(self, fn, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+    @pyqtSlot()
+    def run(self):
+        try:
+            self.fn(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.result.emit()  # Return the result of the processing
+        finally:
+            self.signals.finished.emit()  # Done
 
 
 class Start(QMainWindow, start_window.Ui_StartWindow):
 
     def __init__(self):
         super(Start, self).__init__()
-        self.start_window = None
         self.setupUi(self)
         self.main_window = Game()
         self.duration = 3
+        self.threadpool = QThreadPool()
 
         self.start_button.clicked.connect(lambda: self.start_game())
         self.end_button.clicked.connect(lambda: exit_app())
@@ -32,33 +65,23 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
     def start_game(self):
         client.send(pickle.dumps(self.start_button.objectName()))
         self.main_window.show()
-        timer_update = QTimer()
-        timer_update.timeout.connect(lambda: self.update_timer(timer_update))
-        timer_update.start(1000)
-        timer = QTimer()
-        timer.singleShot(4000, lambda: self.main_window.reset(is_start=True))
+
+        receive_thread = Worker(receive, self.main_window)
+        receive_thread.signals.finished.connect(exit)
+        self.threadpool.start(receive_thread)
 
         window.hide()
-
-        receive_thread = threading.Thread(target=self.main_window.receive)
-        receive_thread.start()
-
-    def update_timer(self, timer):
-        self.main_window.label.setText(f'Game started in {self.duration} sec')
-        if self.duration == 0:
-            self.main_window.label.setText('Observe the cards and memories them!')
-            timer.stop()
-            self.duration = 3
-        self.duration -= 1
 
 
 class Game(QMainWindow, main_window.Ui_MainWindow):
     def __init__(self):
         super(Game, self).__init__()
         self.setupUi(self)
+
         self.open_cards = {}
         self.score1 = 0
         self.score2 = 0
+        self.duration = 3
 
         self.first_turn = True
         self.button_list = [
@@ -134,7 +157,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
 
         self.first_turn = False if self.first_turn is True else True
 
-    def reset(self, is_start=False):
+    def reset(self):
         self.open_cards = {}
         self.hide_button = []
         self.count = 0
@@ -146,11 +169,10 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.label_score2.setText('Score: 0')
 
         for index, b in enumerate(self.button_list):
-            self.get_reset_button(b, index, is_start)
+            self.get_reset_button(b, index)
 
-    def get_reset_button(self, button, card, is_start):
-        if is_start:
-            button.setEnabled(True)
+    def get_reset_button(self, button, card):
+        button.setEnabled(True)
         button.setIcon(QtGui.QIcon(card_list[card]))
         button.setIconSize(QSize(100, 100))
         QTimer().singleShot(3000, lambda: self.update_img(button))
@@ -160,21 +182,46 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         button.setIcon(QtGui.QIcon())
         button.setStyleSheet('QPushButton {background: #716799;}')
 
-    def receive(self):
-        global card_list
-        while True:
-            data = pickle.loads(client.recv(1024))
-            if isinstance(data, list):
-                card_list = data
-            else:
-                button = self.findChild(QPushButton, data)
-                if not button.signalsBlocked():
-                    index = int(data.split('_')[1])
-                    self.clicker(button, card_list[index - 1], from_server=True)
-
 
 def exit_app():
     app.exit()
+
+
+def update_timer(game):
+    while game.duration != 0:
+        game.label.setText(f'Game started in {game.duration} sec')
+        game.duration -= 1
+        time.sleep(1)
+    game.label.setText('Observe the cards and memories them!')
+
+
+def create_thread(game):
+    thread = QThreadPool()
+    update_worker = Worker(update_timer, game)
+    update_worker.signals.finished.connect(game.reset)
+    thread.start(update_worker)
+
+
+def receive(game):
+    global card_list, count_player
+    while True:
+        data = pickle.loads(client.recv(1024))
+        if isinstance(data, list):
+            card_list, count_player = data[0], data[1]
+            if count_player == 1:
+                print('trying for first people')
+                game.label.setText('Waiting for another player to connect...')
+            else:
+                client.send(pickle.dumps('two players'))
+                create_thread(game)
+        else:
+            if data == 'two players':
+                create_thread(game)
+            else:
+                button = game.findChild(QPushButton, data)
+                if not button.signalsBlocked():
+                    index = int(data.split('_')[1])
+                    game.clicker(button, card_list[index - 1], from_server=True)
 
 
 if __name__ == "__main__":
