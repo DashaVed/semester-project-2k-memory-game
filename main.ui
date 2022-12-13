@@ -626,10 +626,10 @@ border: 1px solid #514С66;
     <widget class="QLabel" name="label_profile1">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>101</width>
-       <height>111</height>
+       <x>-90</x>
+       <y>-20</y>
+       <width>321</width>
+       <height>291</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -658,22 +658,25 @@ border: 1px solid #514С66;
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>125</y>
+       <y>130</y>
        <width>121</width>
        <height>20</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>Arial Narrow</family>
-       <pointsize>12</pointsize>
+       <family>Gill Sans MT</family>
+       <pointsize>14</pointsize>
        <weight>75</weight>
-       <italic>true</italic>
+       <italic>false</italic>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #ffffff;</string>
+     </property>
      <property name="text">
-      <string>Score: 0</string>
+      <string>SCORE: 0</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -700,10 +703,10 @@ border: 1px solid #514С66;
     <widget class="QLabel" name="label_profile2">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>101</width>
-       <height>121</height>
+       <x>-70</x>
+       <y>-10</y>
+       <width>241</width>
+       <height>271</height>
       </rect>
      </property>
      <property name="text">
@@ -720,22 +723,25 @@ border: 1px solid #514С66;
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>125</y>
+       <y>130</y>
        <width>121</width>
        <height>20</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>Arial Narrow</family>
-       <pointsize>12</pointsize>
+       <family>Gill Sans MT</family>
+       <pointsize>14</pointsize>
        <weight>75</weight>
-       <italic>true</italic>
+       <italic>false</italic>
        <bold>true</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #ffffff;</string>
+     </property>
      <property name="text">
-      <string>Score: 0</string>
+      <string>SCORE: 0</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
