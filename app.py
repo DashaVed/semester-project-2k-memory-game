@@ -1,7 +1,6 @@
 import pickle
 import socket
 import time
-import traceback
 import sys
 
 from PyQt6.QtWidgets import *
@@ -10,6 +9,7 @@ from PyQt6 import QtGui
 
 import start_window
 import main_window
+from multithreading import Worker
 
 
 PATH_TO_DIR = 'static/img/cards'
@@ -20,38 +20,7 @@ client.connect(('127.0.0.1', 5060))
 count_player = None
 
 
-class WorkerSignals(QObject):
-    finished = pyqtSignal(name='finish')
-    error = pyqtSignal(tuple, name='error')
-    result = pyqtSignal(name='result')
-    progress = pyqtSignal(int, name='progress')
-
-
-class Worker(QRunnable):
-    def __init__(self, fn, *args, **kwargs):
-        super(Worker, self).__init__()
-
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
-        self.signals = WorkerSignals()
-
-    @pyqtSlot()
-    def run(self):
-        try:
-            self.fn(*self.args, **self.kwargs)
-        except:
-            traceback.print_exc()
-            exctype, value = sys.exc_info()[:2]
-            self.signals.error.emit((exctype, value, traceback.format_exc()))
-        else:
-            self.signals.result.emit()  # Return the result of the processing
-        finally:
-            self.signals.finished.emit()  # Done
-
-
 class Start(QMainWindow, start_window.Ui_StartWindow):
-
     def __init__(self):
         super(Start, self).__init__()
         self.setupUi(self)
@@ -67,7 +36,7 @@ class Start(QMainWindow, start_window.Ui_StartWindow):
         self.main_window.show()
 
         receive_thread = Worker(receive, self.main_window)
-        receive_thread.signals.finished.connect(exit)
+        receive_thread.signals.finished.connect(exit_app)
         self.threadpool.start(receive_thread)
 
         window.hide()
@@ -105,7 +74,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.button_16.clicked.connect(lambda: self.clicker(self.button_16, card_list[15]))
         self.button_17.clicked.connect(lambda: self.clicker(self.button_17, card_list[16]))
         self.button_18.clicked.connect(lambda: self.clicker(self.button_18, card_list[17]))
-        self.exit_button.clicked.connect(lambda: exit_app())
+        self.exit_button.clicked.connect(lambda: self.close_window())
         self.reset_button.clicked.connect(lambda: self.reset_game())
 
     def check_pair(self, bn, path_to_image):
@@ -209,13 +178,18 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         button.setIcon(QtGui.QIcon())
         button.setStyleSheet('QPushButton {background: #716799;}')
 
+    @staticmethod
+    def close_window():
+        client.send(pickle.dumps('exit_button'))
+        exit_app()
+
 
 def exit_app():
-    app.exit()
+    client.close()
+    sys.exit()
 
 
 def update_timer(game):
-    print('timer start', game.duration, count_player)
     while game.duration != 0:
         game.label.setText(f'Game starts in {game.duration} seconds')
         game.duration -= 1
@@ -239,26 +213,31 @@ def create_thread(game):
 def receive(game):
     global card_list, count_player
     while True:
-        data = pickle.loads(client.recv(1024))
-        if isinstance(data, list):
-            card_list, parameter = data[0], data[1]
-            if parameter == 1:
-                count_player = 1
-                game.label.setText('Waiting for another player to connect...')
-            elif parameter == 2:
-                count_player = 2
-                client.send(pickle.dumps('two players'))
-                create_thread(game)
+        try:
+            data = pickle.loads(client.recv(1024))
+            if isinstance(data, list):
+                card_list, parameter = data[0], data[1]
+                if parameter == 1:
+                    count_player = 1
+                    game.label.setText('Waiting for another player to connect...')
+                elif parameter == 2:
+                    count_player = 2
+                    client.send(pickle.dumps('two players'))
+                    create_thread(game)
+                else:
+                    create_thread(game)
             else:
-                create_thread(game)
-        else:
-            if data == 'two players':
-                create_thread(game)
-            else:
-                button = game.findChild(QPushButton, data)
-                if not button.signalsBlocked():
-                    index = int(data.split('_')[1])
-                    game.clicker(button, card_list[index - 1], from_server=True)
+                if data == 'two players':
+                    create_thread(game)
+                elif data == 'exit':
+                    exit_app()
+                else:
+                    button = game.findChild(QPushButton, data)
+                    if not button.signalsBlocked():
+                        index = int(data.split('_')[1])
+                        game.clicker(button, card_list[index - 1], from_server=True)
+        except:
+            exit_app()
 
 
 if __name__ == "__main__":
