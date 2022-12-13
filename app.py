@@ -95,6 +95,11 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.count_hide_btn += 2
             if self.count_hide_btn == 18:
                 self.clear_button()
+                if (self.score1 > self.score2 and count_player == 1) or \
+                        (self.score2 > self.score1 and count_player == 2):
+                    self.info_label.setText('You win!')
+                else:
+                    self.info_label.setText('You lose!')
             return
         self.open_cards[card_image] = bn
 
