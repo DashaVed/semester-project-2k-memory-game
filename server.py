@@ -40,13 +40,18 @@ def handle(client):
                 data = [card_list, 'reset']
                 for c in clients:
                     c.send(pickle.dumps(data))
+            elif action == 'exit_button':
+                client_index = clients.index(client)
+                broadcast('exit', client_index)
             else:
                 client_index = clients.index(client)
                 broadcast(action, client_index)
-        except ValueError as e:
-            print(e)
+        except:
             clients.remove(client)
             client.close()
+            print('delete', clients)
+            if len(clients) == 0:
+                count_player = 0
             break
 
 
@@ -55,6 +60,7 @@ def receive():
         client, address = server.accept()
         print("Connected with {}".format(str(address)))
         clients.append(client)
+        print('append', clients)
 
         thread = threading.Thread(target=handle, args=(client, ))
         thread.start()
