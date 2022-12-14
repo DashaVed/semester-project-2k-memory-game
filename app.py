@@ -95,6 +95,7 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.count_hide_btn += 2
             if self.count_hide_btn == 18:
                 self.clear_button()
+                self.info_label.setGeometry(QRect(10, 95, 641, 151))
                 if (self.score1 > self.score2 and count_player == 1) or \
                         (self.score2 > self.score1 and count_player == 2):
                     self.info_label.setText('You win!')
@@ -158,6 +159,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.first_turn = True
         self.label_score1.setText('SCORE: 0')
         self.label_score2.setText('SCORE: 0')
+        self.info_label.setGeometry(QRect(670, 340, 16, 20))
+        self.info_label.setText("")
         button_list = [
             self.button_1, self.button_2, self.button_3,
             self.button_4, self.button_5, self.button_6,
