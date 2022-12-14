@@ -7,8 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>790</width>
-    <height>391</height>
+    <height>366</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>790</width>
+    <height>366</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>790</width>
+    <height>366</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -22,26 +34,29 @@ background-color: #464258;
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>-10</y>
-      <width>761</width>
-      <height>171</height>
+      <x>40</x>
+      <y>10</y>
+      <width>751</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Yu Gothic UI</family>
-      <pointsize>72</pointsize>
-      <weight>75</weight>
+      <family>Symbol</family>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
       <italic>false</italic>
-      <bold>true</bold>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 243, 82);</string>
     </property>
     <property name="text">
-     <string>MEMORY FIGHT</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>static/img/background/header_v1.png</pixmap>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -52,13 +67,13 @@ background-color: #464258;
      <rect>
       <x>290</x>
       <y>160</y>
-      <width>211</width>
+      <width>210</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>MS Sans Serif</family>
+      <family>MS Serif</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -77,14 +92,14 @@ border-radius: 10px;</string>
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>220</y>
-      <width>211</width>
+      <y>210</y>
+      <width>210</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>MS Sans Serif</family>
+      <family>MS Serif</family>
       <pointsize>20</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -115,7 +130,7 @@ border-radius: 10px;</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>560</x>
       <y>80</y>
       <width>201</width>
       <height>271</height>
@@ -134,8 +149,8 @@ border-radius: 10px;</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>60</y>
+      <x>-20</x>
+      <y>50</y>
       <width>311</width>
       <height>301</height>
      </rect>

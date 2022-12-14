@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>790</width>
-    <height>391</height>
+    <height>366</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -582,10 +582,10 @@ border: 1px solid #716799;
    <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
-      <x>116</x>
-      <y>350</y>
-      <width>105</width>
-      <height>31</height>
+      <x>40</x>
+      <y>340</y>
+      <width>20</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -603,16 +603,20 @@ border-radius: 20px;
 }</string>
     </property>
     <property name="text">
-     <string>Reset</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>static/img/background/reset_icon.png</normaloff>static/img/background/reset_icon.png</iconset>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>20</y>
-      <width>121</width>
-      <height>151</height>
+      <y>10</y>
+      <width>111</width>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -626,7 +630,7 @@ border: 1px solid #514С66;
     <widget class="QLabel" name="label_profile1">
      <property name="geometry">
       <rect>
-       <x>-90</x>
+       <x>-100</x>
        <y>-20</y>
        <width>321</width>
        <height>291</height>
@@ -654,42 +658,14 @@ border: 1px solid #514С66;
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_score1">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>130</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Gill Sans MT</family>
-       <pointsize>14</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #ffffff;</string>
-     </property>
-     <property name="text">
-      <string>SCORE: 0</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
       <x>660</x>
       <y>180</y>
-      <width>121</width>
-      <height>151</height>
+      <width>111</width>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -719,51 +695,23 @@ border: 1px solid #514С66;
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_score2">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>130</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Gill Sans MT</family>
-       <pointsize>14</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #ffffff;</string>
-     </property>
-     <property name="text">
-      <string>SCORE: 0</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </widget>
    <widget class="QPushButton" name="exit_button">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>350</y>
-      <width>105</width>
-      <height>31</height>
+      <y>340</y>
+      <width>20</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial Narrow</family>
       <pointsize>16</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
@@ -772,29 +720,92 @@ border-radius: 20px;
 }</string>
     </property>
     <property name="text">
-     <string>Exit</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>static/img/background/cross.png</normaloff>static/img/background/cross.png</iconset>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>350</y>
+      <x>70</x>
+      <y>340</y>
       <width>411</width>
-      <height>31</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Arial Narrow</family>
-      <pointsize>14</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
+      <family>8514oem</family>
+      <pointsize>8</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255, 243, 82);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_score1">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>140</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>8514oem</family>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #716799;</string>
+    </property>
+    <property name="text">
+     <string>SCORE: 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_score2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>310</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>8514oem</family>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #716799;</string>
+    </property>
+    <property name="text">
+     <string>SCORE: 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="info_label">
