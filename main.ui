@@ -809,10 +809,10 @@ border-radius: 20px;
    <widget class="QLabel" name="info_label">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>5</y>
-      <width>631</width>
-      <height>331</height>
+      <x>650</x>
+      <y>350</y>
+      <width>21</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="font">
@@ -824,15 +824,26 @@ border-radius: 20px;
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #716799;
-border-raduis: 2px;
-color: #fff352;</string>
+     <string notr="true"/>
     </property>
     <property name="text">
-     <string>YOU WIN!</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_back">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>340</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

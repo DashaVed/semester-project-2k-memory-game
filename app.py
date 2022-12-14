@@ -95,6 +95,13 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             self.count_hide_btn += 2
             if self.count_hide_btn == 18:
                 self.clear_button()
+                self.info_label.setGeometry(QRect(60, 65, 531, 221))
+                self.info_label.setStyleSheet('border: 2px solid #FFB8CE; color: #FFF352')
+                if (self.score1 > self.score2 and count_player == 1) or \
+                        (self.score2 > self.score1 and count_player == 2):
+                    self.info_label.setText('YOU  WIN!')
+                else:
+                    self.info_label.setText('YOU  LOSE..')
             return
         self.open_cards[card_image] = bn
 
@@ -111,11 +118,11 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         else:
             self.label.setText("Opponent's turn")
         if self.first_turn:
-            self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 4px solid #716799;}')
-            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 1px solid #716799;}')
+            self.groupBox.setStyleSheet('QGroupBox#groupBox {border: 4px solid #716799;}')
+            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2 {border: 1px solid #716799;}')
         else:
-            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 4px solid #716799;}')
-            self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 1px solid #716799;}')
+            self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2 {border: 4px solid #716799;}')
+            self.groupBox.setStyleSheet('QGroupBox#groupBox {border: 1px solid #716799;}')
 
     def clicker(self, bn, path_to_image, from_server=False):
 
@@ -136,8 +143,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
             if self.count_hide_btn < 18:
                 self.change_label()
             else:
-                self.groupBox.setStyleSheet('QGroupBox#groupBox{border: 1px solid #716799;}')
-                self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2{border: 1px solid #716799;}')
+                self.groupBox.setStyleSheet('QGroupBox#groupBox {border: 1px solid #716799;}')
+                self.groupBox_2.setStyleSheet('QGroupBox#groupBox_2 {border: 1px solid #716799;}')
 
     def reset_game(self):
         self.duration = 3
@@ -153,6 +160,11 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.first_turn = True
         self.label_score1.setText('SCORE: 0')
         self.label_score2.setText('SCORE: 0')
+        self.info_label.setGeometry(QRect(670, 340, 16, 20))
+        self.info_label.setText("")
+        self.info_label.setStyleSheet('')
+        self.label_back.setGeometry(QRect(390, 340, 16, 20))
+        self.label_back.setStyleSheet('')
         button_list = [
             self.button_1, self.button_2, self.button_3,
             self.button_4, self.button_5, self.button_6,
@@ -198,8 +210,8 @@ def update_timer(game):
         game.label.setText('Your turn')
     else:
         game.label.setText("Opponent's turn")
-    game.groupBox.setStyleSheet('QGroupBox#groupBox{border: 4px solid #716799;}')
-    game.groupBox_2.setStyleSheet('QGroupBox#groupBox{border: 1px solid #716799;}')
+    game.groupBox.setStyleSheet('QGroupBox#groupBox {border: 4px solid #716799;}')
+    game.groupBox_2.setStyleSheet('QGroupBox#groupBox {border: 1px solid #716799;}')
     game.duration = 3
 
 
