@@ -82,10 +82,10 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         if card_image in self.open_cards.keys():
             if self.first_turn:
                 self.score1 += 1
-                self.label_score1.setText(f'Score: {self.score1}')
+                self.label_score1.setText(f'SCORE: {self.score1}')
             else:
                 self.score2 += 1
-                self.label_score2.setText(f'Score: {self.score2}')
+                self.label_score2.setText(f'SCORE: {self.score2}')
 
             bn.setStyleSheet("QPushButton {background: #E37936;}")
             self.open_cards[card_image].setStyleSheet("QPushButton {background: #E37936;}")
@@ -151,8 +151,8 @@ class Game(QMainWindow, main_window.Ui_MainWindow):
         self.score1 = 0
         self.score2 = 0
         self.first_turn = True
-        self.label_score1.setText('Score: 0')
-        self.label_score2.setText('Score: 0')
+        self.label_score1.setText('SCORE: 0')
+        self.label_score2.setText('SCORE: 0')
         button_list = [
             self.button_1, self.button_2, self.button_3,
             self.button_4, self.button_5, self.button_6,
